@@ -1,24 +1,16 @@
-from typing import Union
 from fastapi import FastAPI
-from dotenv import load_dotenv
-import os
-
-# Cargar el archivo .env
-load_dotenv()
-
-# Obtener la variable de entorno
-DATABASE_URL = os.getenv("DATABASE_URL")
-if DATABASE_URL is None:
-    raise RuntimeError("DATABASE_URL no está definida en el archivo .env")
+from fastapi.middleware.cors import CORSMiddleware
+from app import api
 
 app = FastAPI()
 
+# CORS para permitir acceso desde React
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(api.router)
