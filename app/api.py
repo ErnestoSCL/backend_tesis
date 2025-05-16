@@ -19,8 +19,8 @@ def predict(data: InputArray):
 
     return {
         "riesgo_autismo": resultado["riesgo_autismo"],
+        "clase_predicha": resultado["clase_predicha"],
         "vector_entrada": feature_vector.values.tolist()[0],
         "datos_originales": datos_originales,
         "mensaje": "Evaluación procesada correctamente"
     }
-
