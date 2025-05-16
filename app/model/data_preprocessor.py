@@ -78,7 +78,8 @@ class DataPreprocessor:
             **self.data,
             "Comorbidity_%": comorb,
             "Clinical_Profile_Mixed": dummy_mixed,
-            "Clinical_Profile_Social interaction": dummy_social
+            "Clinical_Profile_Social interaction": dummy_social,
+            "Sex_M": 0  
         }
 
         # Orden usado para entrenar PCA
