@@ -6,14 +6,17 @@ def predecir(df):
     model_path = Path(__file__).resolve().parent.parent.parent / "model.pkl"
     model = joblib.load(model_path)
 
-    # Predecir la probabilidad de clase 1 (riesgo)
+    # Predecir clase (0 o 1) y obtener todas las probabilidades
     clase_predicha = int(model.predict(df)[0])
-    probabilidad = model.predict_proba(df)[0][1]  # Clase positiva
+    probabilidades = model.predict_proba(df)[0]
+
+    # Obtener la probabilidad correspondiente a la clase predicha
+    probabilidad = probabilidades[clase_predicha]
 
     # Convertir a porcentaje redondeado
-    riesgo = round(probabilidad * 100, 2)
+    n_confianza = round(probabilidad * 100, 2)
 
     return {
-        "riesgo_autismo": riesgo,
-        "clase_predicha": clase_predicha
+        "clase_predicha": clase_predicha,
+        "n_confianza": n_confianza
     }
