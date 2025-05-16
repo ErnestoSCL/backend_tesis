@@ -16,5 +16,5 @@ def predict(data: InputArray):
 
     return {
         "clase_predicha": resultado["clase_predicha"],
-        "n_confianza": resultado["n_confianza"],
+        "riesgo_autismo": resultado["riesgo_autismo"],
     }

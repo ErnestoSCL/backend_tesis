@@ -14,9 +14,9 @@ def predecir(df):
     probabilidad = probabilidades[clase_predicha]
 
     # Convertir a porcentaje redondeado
-    n_confianza = round(probabilidad * 100, 2)
+    riesgo_autismo = round(probabilidad * 100, 2)
 
     return {
         "clase_predicha": clase_predicha,
-        "n_confianza": n_confianza
+        "riesgo_autismo": riesgo_autismo
     }
