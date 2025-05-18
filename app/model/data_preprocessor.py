@@ -2,6 +2,7 @@ from pathlib import Path
 import joblib
 import pandas as pd  # Asegúrate de tenerlo importado arriba
 
+
 class DataPreprocessor:
     def __init__(self, raw_values):
         self.campos = [
@@ -145,6 +146,51 @@ class DataPreprocessor:
 
         # Retornar como DataFrame para evitar warnings en el modelo
         return pd.DataFrame([valores], columns=ordered_vars)
+    
+    def get_duration_minutes(self):
+        try:
+            inicio = pd.to_datetime(self.data["Time_Start"]).to_pydatetime()
+            fin = pd.to_datetime(self.data["Time_End"]).to_pydatetime()
+            return int((fin - inicio).total_seconds() // 60)
+        except Exception as e:
+            print(f"Error al calcular duración: {e}")
+            return 0
+
+    
+    def get_ordered_column_dict(self):
+        # Este orden corresponde al esquema de la tabla 'evaluaciones' en PostgreSQL
+        return {
+            "edad": self.data["Age_Years"],
+            "sexo": "M" if self.data["Sex_M"] == 1 else "F",
+            "a1": self.data["A1"],
+            "a2": self.data["A2"],
+            "a3": self.data["A3"],
+            "a4": self.data["A4"],
+            "a5": self.data["A5"],
+            "a6": self.data["A6"],
+            "a7": self.data["A7"],
+            "a8": self.data["A8"],
+            "a9": self.data["A9"],
+            "a10": self.data["A10_Autism_Spectrum_Quotient"],
+            "qchat_resultado": self.data["Qchat_10_Score"],
+            "trastorno_habla": "Si" if self.data["Speech_Delay_Language_Disorder"] == 1 else "No",
+            "trastorno_aprendizaje": "Si" if self.data["Learning_Disorder"] == 1 else "No",
+            "trastorno_genetico": "Si" if self.data["Genetic_Disorders"] == 1 else "No",
+            "trastorno_depresion": "Si" if self.data["Depression"] == 1 else "No",
+            "retraso_global_intelectual": "Si" if self.data["Global_Developmental_Delay_Intellectual_Disability"] == 1 else "No",
+            "problemas_comportamiento": "Si" if self.data["Social_Behavioural_Issues"] == 1 else "No",
+            "trastorno_ansiedad": "Si" if self.data["Anxiety_Disorder"] == 1 else "No",
+            "familiar_autista": "Si" if self.data["Family_Mem_With_Asd"] == 1 else "No",
+            "porc_comorbilidad": round(self.get_comorbidity_percent() / 100, 2),
+            "porc_deficiencia_social_interactiva": round(float(self.data["Social_Interaction_Issues_%"]) / 100, 2),
+            "porc_deficiencia_comunicativa": round(float(self.data["Communication_Issues_%"]) / 100, 2),
+            "perfil_clinico": self.get_clinical_profile()[0],
+            # rasgos_tea y nivel_confianza serán añadidos después de la predicción
+            "hora_inicio": pd.to_datetime(self.data["Time_Start"]).to_pydatetime(),
+            "hora_fin": pd.to_datetime(self.data["Time_End"]).to_pydatetime(),
+            "duracion_minutos": self.get_duration_minutes()
+        }
+
 
     def get_data_dict(self):
         return self.data
