@@ -1,6 +1,7 @@
 from pathlib import Path
 import joblib
-import pandas as pd  # Asegúrate de tenerlo importado arriba
+import pandas as pd 
+from pandas.errors import ParserError
 
 
 class DataPreprocessor:
@@ -147,12 +148,12 @@ class DataPreprocessor:
         # Retornar como DataFrame para evitar warnings en el modelo
         return pd.DataFrame([valores], columns=ordered_vars)
     
-    def get_duration_minutes(self):
+    def get_duration_minutes(self) -> int:
         try:
             inicio = pd.to_datetime(self.data["Time_Start"]).to_pydatetime()
             fin = pd.to_datetime(self.data["Time_End"]).to_pydatetime()
             return int((fin - inicio).total_seconds() // 60)
-        except Exception as e:
+        except (ValueError, TypeError, ParserError) as e:
             print(f"Error al calcular duración: {e}")
             return 0
 
