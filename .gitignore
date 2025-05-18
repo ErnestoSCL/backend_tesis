@@ -19,4 +19,8 @@ __pycache__/
 
 # Archivos del sistema operativo
 .DS_Store
+*.pyc
 Thumbs.db
+
+# Railway
+*.sqlite3
