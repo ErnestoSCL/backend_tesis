@@ -192,6 +192,12 @@ class DataPreprocessor:
             "duracion_minutos": self.get_duration_minutes()
         }
 
+    def preparar_data_para_guardar(self, resultado_modelo) -> dict:
+        data = self.get_ordered_column_dict()
+        data["rasgos_tea"] = "Si" if resultado_modelo["clase_predicha"] == 1 else "No"
+        data["nivel_confianza"] = round(resultado_modelo["riesgo_autismo"] / 100, 2)
+        return data
+
 
     def get_data_dict(self):
         return self.data
