@@ -86,6 +86,7 @@ Abre en tu navegador: http://localhost:8000/docs
 │   ├── db/
 │   ├── model/
 │   ├── schemas/
+│   ├── utils/
 │   ├── api.py
 │   └── main.py
 ├── model.pkl
